@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class='container mt-5'> 
+    <h2 class='text-center alert alert-success'>Django FBV Ajax Bootstrap 5 - Crud</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <h4 class='text-center alert alert-info'>Add/Update Cliente</h4>
+            <form action="">{% csrf_token %}
+                {{form.as_p}}
+                <input type="button" class='btn btn-success' value="Save" id='btnsave' style='width: 100%;'>
+            </form>
+        </div>
+        <div class="col-sm-8">
+            <h4 class="text-center alert alert-info">
+                Listagem de Clientes
+            </h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope='col'>ID</th>
+                        <th scope='col'>Nome</th>
+                        <th scope='col'>Email</th>
+                        <th scope='col'>Telefone</th>
+                        <th scope='col'>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id='tbody'>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{cliente.id}}</td>
+                        <td>{{cliente.nome}}</td>
+                        <td>{{cliente.email}}</td>
+                        <td>{{cliente.telefone}}</td>
+                        <td>
+                            <input 
+                            type="button" 
+                            value="Editar" 
+                            data-sid='{{cliente.id}}'
+                            class='btn btn-warning btn-sm'
+                            />
+
+                            <input 
+                            type="button" 
+                            value="Deletar" 
+                            data-sid='{{cliente.id}}'
+                            class='btn btn-danger btn-sm'
+                            />
+                           
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+   
+</div>
+
+
+
+
+{% endblock content %}

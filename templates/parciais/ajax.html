@@ -1,0 +1,67 @@
+<script>
+    $("#btnsave").click(function(){
+        output = ""
+        let nome = $("#nome_id").val();
+        let email = $("#email_id").val();
+        let telefone = $("#telefone_id").val();
+        let crsf = $("input[name=csrfmiddlewaretoken]").val()
+
+        if (nome == ""){
+            console.log("Digite o nome")
+        }
+        else if (email == ""){
+            console.log("Digite o email")
+        }
+        else if (telefone == ""){
+            console.log("Digite o telefone")
+        }
+        else {
+            //console.log(nome, email, telefone);
+            mydata = {nome: nome, email:email, telefone: telefone, csrfmiddlewaretoken:crsf};
+            $.ajax({
+                url: "{% url 'save' %}",
+                method: 'POST',
+                data: mydata,
+                success:function(data){
+                    //console.log(data);
+                    x = data.clientes_data
+                    if (data.status == 1){
+                        console.log('Cliente inserido com success!')
+                        for (i=0; i<x.length; i++){
+                            output += 
+                                "<tr><td>" + 
+                                x[i].id + 
+                                "</td><td>" + 
+                                x[i].nome + 
+                                "</td><td>" + 
+                                x[i].email + 
+                                "</td><td>" + 
+                                x[i].telefone +
+                                "</td><td> <input type='button'\
+                                    class='btn btn-warning btn-sm' \
+                                    value='Editar' \
+                                    data-sid=' + x[i].id + '/> \
+                                    <input \
+                                    type='button'\
+                                    class='btn btn-danger btn-sm' \
+                                    value='Deletar' \
+                                    data-sid=' + x[i].id + '/>";
+                                    
+                        }
+                        $("#tbody").html(output);
+                        $("form")[0].reset();
+                    }
+                    if (data.status == 0){
+                        console.log("Error")
+                    }
+                }
+            })
+        }
+
+
+    });
+
+    
+    
+
+</script>
