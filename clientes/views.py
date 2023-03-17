@@ -25,3 +25,27 @@ def save(request):
             return JsonResponse({'status': 1, 'clientes_data': clientes_data})
         else:
             return JsonResponse({'status': 0})
+        
+
+
+def delete(request):
+    if request.method == 'POST':
+        id = request.POST.get('cliente_id')
+        cliente = Cliente.objects.get(pk=id)
+        cliente.delete()
+        return JsonResponse({'status': 1})
+    else:
+        return JsonResponse({'status': 0})
+    
+
+def edit(request):
+    if request.method == 'POST':
+        id = request.POST.get('cliente_id')
+        cliente = Cliente.objects.get(pk=id)
+        data = {"id": cliente.id, 
+                "nome": cliente.nome, 
+                "email": cliente.email, 
+                "telefone": cliente.telefone}
+        print(data)
+        return JsonResponse(data)
+

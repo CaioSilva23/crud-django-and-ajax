@@ -1,4 +1,11 @@
 <script>
+    // FRONT END VALIDATION FORM
+    function validateEmail(email){
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    }
+
+    // Add cliente
     $("#btnsave").click(function(){
         output = ""
         let nome = $("#nome_id").val();
@@ -7,13 +14,18 @@
         let crsf = $("input[name=csrfmiddlewaretoken]").val()
 
         if (nome == ""){
-            console.log("Digite o nome")
+            swal("Atenção!", "Informe o nome !");
         }
         else if (email == ""){
-            console.log("Digite o email")
+            swal("Atenção!", "Informe o email !");
+        }    
+        else if (!(validateEmail(email))){
+            document.getElementById('email_id').value='';
+            swal("Atenção!", "Email inválido!");
+            return false;
         }
         else if (telefone == ""){
-            console.log("Digite o telefone")
+            swal("Atenção", "Informe o telefone !");
         }
         else {
             //console.log(nome, email, telefone);
@@ -38,14 +50,17 @@
                                 "</td><td>" + 
                                 x[i].telefone +
                                 "</td><td> <input type='button'\
-                                    class='btn btn-warning btn-sm' \
+                                    class='btn btn-warning btn-sm btn-edit' \
                                     value='Editar' \
-                                    data-sid=' + x[i].id + '/> \
-                                    <input \
+                                    data-sid=" + 
+                                    x[i].id +
+                                    "> <input \
                                     type='button'\
-                                    class='btn btn-danger btn-sm' \
+                                    class='btn btn-danger btn-sm btn-del' \
                                     value='Deletar' \
-                                    data-sid=' + x[i].id + '/>";
+                                    data-sid=" + 
+                                    x[i].id + 
+                                    ">";
                                     
                         }
                         $("#tbody").html(output);
@@ -61,7 +76,47 @@
 
     });
 
+
+    // Delete cliente
+    $("tbody").on("click", ".btn-del", function(){
+        let id = $(this).attr("data-sid");
+        let crsf = $("input[name=csrfmiddlewaretoken]").val()
+        mydata = {cliente_id:id, csrfmiddlewaretoken:crsf}
+        mythis = this;
+
+        $.ajax({
+            url: "{% url 'delete' %}",
+            method: 'POST',
+            data: mydata,
+            success:function(data){
+                if (data.status == 1){
+                    console.log('Cliente deletado!')
+                    $(mythis).closest("tr").fadeOut();
+                }
+                if (data.status == 0){
+                    console.log('Error')
+                }
+            },
+        });
+    });
+
+
+    // Editar cliente
+    $("tbody").on("click", ".btn-edit", function(){
+        let id = $(this).attr("data-sid");
+        let crsf = $("input[name=csrfmiddlewaretoken]").val()
+        mydata = {cliente_id:id, csrfmiddlewaretoken:crsf}
     
+        $.ajax({
+            url: "{% url 'edit' %}",
+            method: 'POST',
+            data: mydata,
+            dataType: "json",
+            success:function(data){
+                console.log(data)
+            },
+        });
+    });
     
 
 </script>

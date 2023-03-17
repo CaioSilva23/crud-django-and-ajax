@@ -8,6 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('save/', views.save, name='save'),
+    path('delete/', views.delete, name='delete'),
+    path('edit/', views.edit, name='edit'),
 ]
 
 
