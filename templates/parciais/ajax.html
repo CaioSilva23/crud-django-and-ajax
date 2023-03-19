@@ -114,6 +114,9 @@
             dataType: "json",
             success:function(data){
                 console.log(data)
+                $("#nome_id").val(data.nome);
+                $("#email_id").val(data.email);
+                $("#telefone_id").val(data.telefone);
             },
         });
     });

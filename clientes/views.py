@@ -42,10 +42,9 @@ def edit(request):
     if request.method == 'POST':
         id = request.POST.get('cliente_id')
         cliente = Cliente.objects.get(pk=id)
-        data = {"id": cliente.id, 
+        data = {"id": cliente.pk, 
                 "nome": cliente.nome, 
                 "email": cliente.email, 
                 "telefone": cliente.telefone}
-        print(data)
         return JsonResponse(data)
 
